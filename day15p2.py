@@ -1,5 +1,6 @@
 import networkx as nx
 from operator import itemgetter
+import copy
 def getUnitByPos(pos,units):
     for u in units:
         if pos==u.pos:
@@ -174,43 +175,53 @@ class Unit:
         gmapa.remove_node(movimiento)
         self.pos=movimiento
 
-mapa=[]
-units=[]
+ataque_elfos=3
+mapa_original=[]
+units_original=[]
 with open("input15.txt","r") as f:
-    mapa=f.readlines()
-    for l in range(len(mapa)):
-        mapa[l]=list(mapa[l].strip())
-        for c in range(len(mapa[l])):
-            if mapa[l][c]=='E':
-                units.append(Unit((l,c),200,3,'E'))
-            elif mapa[l][c]=='G':
-                units.append(Unit((l,c),200,3,'G'))
+    mapa_original=f.readlines()
+    for l in range(len(mapa_original)):
+        mapa_original[l]=list(mapa_original[l].strip())
+        for c in range(len(mapa_original[l])):
+            if mapa_original[l][c]=='E':
+                units_original.append(Unit((l,c),200,ataque_elfos,'E'))
+            elif mapa_original[l][c]=='G':
+                units_original.append(Unit((l,c),200,3,'G'))
 
+print(getNumUnitsByRaza(units_original))
 
-gmapa=generateGraph(mapa)
-#print(gmapa.nodes())
-#print(gmapa.edges())
-ronda=1
 while True:
-    #sort units in reading order
-    units.sort(key = lambda j:j.pos[1])
-    units.sort(key = lambda i:i.pos[0])
+    ataque_elfos+=1
+    mapa=copy.deepcopy(mapa_original)
+    units=copy.deepcopy(units_original)
     for u in units:
-        #print(u.pos)
-        if not u.isDead():
-            if u.attack(mapa,units,gmapa)==False:
-                u.move(mapa,units,gmapa)
-                u.attack(mapa,units,gmapa)
-    units=[u for u in units if not u.isDead()]
-    numUnits=getNumUnitsByRaza(units)
-    if numUnits[0]==0 or numUnits[1]==0:#TODO arreglar condicion de parada
+        if u.raza=='E':
+            u.atk=ataque_elfos
+    gmapa=generateGraph(mapa)
+    ronda=1
+    while True:
+        #sort units in reading order
+        units.sort(key = lambda j:j.pos[1])
+        units.sort(key = lambda i:i.pos[0])
+        for u in units:
+            #print(u.pos)
+            if not u.isDead():
+                if u.attack(mapa,units,gmapa)==False:
+                    u.move(mapa,units,gmapa)
+                    u.attack(mapa,units,gmapa)
+        units=[u for u in units if not u.isDead()]
+        numUnits=getNumUnitsByRaza(units)
+        if numUnits[0]==0 or numUnits[1]==0:#TODO arreglar condicion de parada
+            break
+        ronda+=1
+    print("batalla con ataque "+str(ataque_elfos)+" terminada")
+    print(getNumUnitsByRaza(units))
+    for u in units:
+        print(str(u.hp)+" ",end='')
+    print('')
+    if getNumUnitsByRaza(units)[0]==getNumUnitsByRaza(units_original)[0]:
+        print(getHpSum(units))
+        print(ronda)
+        print(ronda*getHpSum(units))
+        print((ronda-1)*getHpSum(units))
         break
-    print(ronda)
-    ronda+=1
-print(getHpSum(units))
-print(ronda)
-print((ronda-1)*getHpSum(units))
-
-for l in mapa:
-    print("".join(l))
-
