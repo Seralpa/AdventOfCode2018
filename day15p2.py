@@ -97,7 +97,7 @@ class Unit:
         
 
     def getEnemigos(self,units):
-        return [u for u in units if u.raza!=self.raza]
+        return [u for u in units if u.raza!=self.raza and not u.isDead()]
 
     def move(self,mapa,units,gmapa):
         if len(self.getEnemigos(units))==0:
@@ -188,7 +188,7 @@ with open("input15.txt","r") as f:
             elif mapa_original[l][c]=='G':
                 units_original.append(Unit((l,c),200,3,'G'))
 
-print(getNumUnitsByRaza(units_original))
+#print(getNumUnitsByRaza(units_original))
 
 while True:
     ataque_elfos+=1
@@ -215,13 +215,9 @@ while True:
             break
         ronda+=1
     print("batalla con ataque "+str(ataque_elfos)+" terminada")
-    print(getNumUnitsByRaza(units))
-    for u in units:
-        print(str(u.hp)+" ",end='')
-    print('')
     if getNumUnitsByRaza(units)[0]==getNumUnitsByRaza(units_original)[0]:
-        print(getHpSum(units))
-        print(ronda)
+        #print(getHpSum(units))
+        #print(ronda)
         print(ronda*getHpSum(units))
         print((ronda-1)*getHpSum(units))
         break

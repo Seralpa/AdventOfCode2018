@@ -15,7 +15,7 @@ while True:
     newRecipes=divideRecipes(newRecipe)
     recipes+=newRecipes
     current=((int(recipes[current[0]])+1+current[0])%len(recipes), (int(recipes[current[1]])+1+current[1])%len(recipes))
-    if it%1000000==0:
+    if it%10000000==0:
         print(it)
         index=recipes.find(patron)
         if index!=-1:

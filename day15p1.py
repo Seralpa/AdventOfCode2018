@@ -96,7 +96,7 @@ class Unit:
         
 
     def getEnemigos(self,units):
-        return [u for u in units if u.raza!=self.raza]
+        return [u for u in units if u.raza!=self.raza and not u.isDead()]
 
     def move(self,mapa,units,gmapa):
         if len(self.getEnemigos(units))==0:
@@ -153,6 +153,8 @@ class Unit:
         if len(minimum_paths)==0:
             return None
 
+        
+
         movimiento=min(minimum_paths,key= lambda x:len(x))[0]
         
         #realizar movimiento
@@ -187,6 +189,7 @@ with open("input15.txt","r") as f:
                 units.append(Unit((l,c),200,3,'G'))
 
 
+
 gmapa=generateGraph(mapa)
 #print(gmapa.nodes())
 #print(gmapa.edges())
@@ -203,14 +206,16 @@ while True:
                 u.attack(mapa,units,gmapa)
     units=[u for u in units if not u.isDead()]
     numUnits=getNumUnitsByRaza(units)
+    
     if numUnits[0]==0 or numUnits[1]==0:#TODO arreglar condicion de parada
         break
-    print(ronda)
+    #print(ronda)
     ronda+=1
-print(getHpSum(units))
-print(ronda)
+#print(units[-1].pos)
+#print(getHpSum(units))
+#print(ronda)
 print((ronda-1)*getHpSum(units))
+print((ronda)*getHpSum(units))
 
-for l in mapa:
-    print("".join(l))
+
 

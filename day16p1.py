@@ -1,3 +1,8 @@
+import re
+before=re.compile(r"Before: \[([0-9]+), ([0-9]+), ([0-9]+), ([0-9]+)]")
+operacion=re.compile(r"([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+)")
+after=re.compile(r"After:  \[([0-9]+), ([0-9]+), ([0-9]+), ([0-9]+)]")
+
 def operate(operation,registers):
     if operation[0]==0:#addr
         registers[operation[3]]=registers[operation[1]]+registers[operation[2]]
@@ -49,4 +54,16 @@ def operate(operation,registers):
             registers[operation[3]]=1
         else:
             registers[operation[3]]=0
-            
+
+
+antes=[]
+despues=[]
+operaciones=[]
+with open("inputTest.txt") as f:
+    for l in f:
+        if before.match(l)!=None:
+            pass
+        elif after.match(l)!=None:
+            pass
+        elif operacion.match(l)!=None:
+            pass
