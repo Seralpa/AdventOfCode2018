@@ -62,8 +62,18 @@ operaciones=[]
 with open("inputTest.txt") as f:
     for l in f:
         if before.match(l)!=None:
-            pass
+            matcher=before.match(l)
+            antes.append([matcher.group(1),matcher.group(2),matcher.group(3),matcher.group(4)])
         elif after.match(l)!=None:
-            pass
+            matcher=after.match(l)
+            despues.append([matcher.group(1),matcher.group(2),matcher.group(3),matcher.group(4)])
         elif operacion.match(l)!=None:
-            pass
+            matcher=operacion.match(l)
+            operaciones.append([matcher.group(1),matcher.group(2),matcher.group(3),matcher.group(4)])
+
+for o in range(len(operaciones)):
+    coincidencias=0
+    for i in range(16):
+        operate(operaciones[o],before[o])
+        if before[o]==after[o]:
+            coincidencias+=1
