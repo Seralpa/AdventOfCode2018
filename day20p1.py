@@ -30,7 +30,7 @@ def follow_path(pos,path,mapa):#pos is ij
             follow_path(pos,path[bar[-1]+1:cierre]+path[cierre+1:],mapa)
             break
 
-with open("inputTest.txt") as f:
+with open("input20.txt") as f:
     path=list(f.readline().strip())
     path.pop()
     path.pop(0)
